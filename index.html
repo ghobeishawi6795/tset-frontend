@@ -1,0 +1,193 @@
+<!--
+  آزمون‌ساز معلم
+  © ghobeishawi - All rights reserved.
+-->
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>آزمون‌ساز معلم</title>
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#1D3E73" />
+<link rel="icon" href="icons/icon-192.png" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/mhchem.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap');
+  * { box-sizing: border-box; }
+  html, body, #root { height: 100%; margin: 0; }
+  body { font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif; background: #F8FAFC; }
+  table { direction: rtl; }
+  select { font-family: inherit; }
+  ::selection { background: #BFDBFE; }
+  .sidebar-item:hover { background: rgba(255,255,255,.07); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<!--
+  بنر «نصب برنامه» — عمداً با جاوااسکریپت خام نوشته شده (نه داخل درخت
+  React)، چون باید همون لحظه‌ی باز شدن لینک نشون داده بشه، حتی قبل از
+  این‌که React خودشو mount کنه یا صفحه‌ی لاگین بیاد بالا.
+-->
+<div id="pwa-install-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:99998;background:#1D3E73;color:#fff;padding:10px 14px;align-items:center;justify-content:space-between;gap:10px;font-family:'Vazirmatn','Segoe UI',Tahoma,sans-serif;direction:rtl;box-shadow:0 2px 8px rgba(0,0,0,.15);">
+  <span id="pwa-install-text" style="font-size:13px;line-height:1.6;">می‌خوای این سامانه رو مثل یک اپ نصب کنی؟</span>
+  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+    <button id="pwa-install-btn" style="background:#fff;color:#1D3E73;border:none;border-radius:8px;padding:7px 16px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;">نصب</button>
+    <button id="pwa-install-dismiss" aria-label="بستن" style="background:transparent;color:#fff;border:none;font-size:20px;line-height:1;cursor:pointer;padding:2px 6px;">×</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var DISMISS_KEY = 'pwaInstallDismissedAt';
+  var DISMISS_DAYS = 14;
+  var banner = document.getElementById('pwa-install-banner');
+  var textEl = document.getElementById('pwa-install-text');
+  var installBtn = document.getElementById('pwa-install-btn');
+  var dismissBtn = document.getElementById('pwa-install-dismiss');
+  var deferredPrompt = null;
+
+  function alreadyInstalled() {
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  }
+  function recentlyDismissed() {
+    try {
+      var t = localStorage.getItem(DISMISS_KEY);
+      return t && (Date.now() - Number(t)) < DISMISS_DAYS * 24 * 60 * 60 * 1000;
+    } catch (e) { return false; }
+  }
+  function dismiss() {
+    banner.style.display = 'none';
+    try { localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch (e) { /* ignore */ }
+  }
+  function showBanner() {
+    if (alreadyInstalled() || recentlyDismissed()) return;
+    banner.style.display = 'flex';
+  }
+
+  if (!alreadyInstalled() && !recentlyDismissed()) {
+    // اندروید/کروم و بیشتر مرورگرهای مبتنی بر Chromium: این رویداد فقط
+    // وقتی معیارهای PWA (manifest معتبر + service worker + https) برقرار
+    // باشه شلیک می‌شه — گاهی بلافاصله، گاهی با کمی تأخیر.
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      showBanner();
+    });
+    window.addEventListener('appinstalled', function () {
+      deferredPrompt = null;
+      banner.style.display = 'none';
+    });
+
+    // آیفون/سافاری: اصلاً از beforeinstallprompt پشتیبانی نمی‌کنه و نصب
+    // برنامه‌ای امکان‌پذیر نیست — فقط راهنمای «افزودن به صفحه‌ی اصلی» رو نشون می‌دیم.
+    var isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+    if (isIos) {
+      textEl.textContent = 'برای نصب: دکمه‌ی اشتراک‌گذاری (Share) رو بزن، بعد «Add to Home Screen» رو انتخاب کن.';
+      installBtn.style.display = 'none';
+      setTimeout(showBanner, 800);
+    }
+  }
+
+  installBtn.addEventListener('click', function () {
+    if (!deferredPrompt) { dismiss(); return; }
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.finally(function () {
+      deferredPrompt = null;
+      banner.style.display = 'none';
+    });
+  });
+  dismissBtn.addEventListener('click', dismiss);
+})();
+</script>
+
+<script>
+  var overlay = null;
+  function showError(title, msg, loc) {
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:999999;max-height:80vh;overflow:auto;background:#fff;border-bottom:4px solid #b91c1c;padding:16px;direction:ltr;text-align:left;';
+      document.body.appendChild(overlay);
+    }
+    var box = document.createElement('pre');
+    box.style.cssText = 'white-space:pre-wrap;margin:0 0 12px 0;color:#b91c1c;font-family:monospace;font-size:12px;';
+    box.textContent = title + '\n' + msg + (loc ? ('\n' + loc) : '');
+    overlay.appendChild(box);
+  }
+  window.addEventListener('error', function (e) {
+    var msg = (e && e.message) ? e.message : String(e);
+    var loc = (e && e.filename) ? (e.filename + ':' + e.lineno + ':' + e.colno) : '';
+    showError('JS ERROR:', msg, loc);
+  });
+  window.addEventListener('unhandledrejection', function (e) {
+    var reason = e && e.reason;
+    var msg = reason && reason.message ? reason.message : String(reason);
+    showError('UNHANDLED PROMISE REJECTION:', msg, '');
+  });
+</script>
+
+
+<!--
+  This app's source is split into multiple files under js/ so that future edits only
+  need to touch the one relevant file instead of the whole app:
+    js/icons.js          - all icon components (+ the React hooks destructure)
+    js/ui.js             - shared KV/data helpers + shared UI primitives (Button, Modal, Field, Sidebar, TopBar, etc.)
+    js/auth-screens.js   - login / register / forgot-password / reset-password
+    js/screens-exams.js  - dashboard, exams list, per-exam questions, question bank
+    js/screens-taking.js - student exam-taking flow, results, essay grading
+    js/screens-classes.js- classes, roster, students, messages, student portal, settings
+    js/screens-admin.js  - school-admin dashboard (list/create/delete teacher accounts)
+    js/screens-superadmin.js - super-admin dashboard (create/list schools + their admin accounts)
+    js/app.js            - root EduExamApp component + ReactDOM render (must load LAST)
+
+  IMPORTANT: the browser does NOT load these source files directly anymore.
+  They used to be loaded as text/babel scripts and transpiled live in every
+  visitor's browser on every page load — with this many files/lines that
+  became noticeably slow, especially on phones. They're now precompiled
+  (JSX -> React.createElement, via the TypeScript compiler's JSX transform)
+  into one plain file, js/bundle.js, which is what's actually loaded below.
+
+  Whenever any js/*.js source file changes, js/bundle.js MUST be regenerated
+  from it before deploying, or the site will keep running the old code.
+-->
+<script>
+  // ---------------------------------------------------------
+  // این فرانت‌اند روی GitHub Pages هاست می‌شه، ولی بک‌اند (API) جای
+  // دیگه‌ایه: روی Bunny Edge Scripting. کد اصلی برنامه همه‌جا مسیرهای
+  // نسبی مثل fetch("/api/...") صدا می‌زنه (که قبلاً چون فرانت و بک‌اند
+  // روی یک دامنه بودن درست کار می‌کرد). این بخش، بدون دست‌زدن به هیچ
+  // کد دیگه‌ای، fetch رو یک‌بار جایگزین می‌کنه تا هر آدرسی که با
+  // "/api/" شروع بشه، خودکار به آدرس واقعی بک‌اند Bunny اضافه بشه.
+  window.__API_BASE__ = "https://tset-bunny-a5r9w.bunny.run";
+  (function () {
+    var realFetch = window.fetch.bind(window);
+    window.fetch = function (input, init) {
+      if (typeof input === "string" && input.indexOf("/api/") === 0) {
+        input = window.__API_BASE__ + input;
+      }
+      return realFetch(input, init);
+    };
+  })();
+</script>
+<script src="js/bundle.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () {
+        /* offline support just won't be available this session — the app
+           still works fully online without it */
+      });
+    });
+  }
+</script>
+</body>
+</html>
