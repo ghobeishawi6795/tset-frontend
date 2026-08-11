@@ -166,8 +166,13 @@
   // نسبی مثل fetch("/api/...") صدا می‌زنه (که قبلاً چون فرانت و بک‌اند
   // روی یک دامنه بودن درست کار می‌کرد). این بخش، بدون دست‌زدن به هیچ
   // کد دیگه‌ای، fetch رو یک‌بار جایگزین می‌کنه تا هر آدرسی که با
-  // "/api/" شروع بشه، خودکار به آدرس واقعی بک‌اند Bunny اضافه بشه.
-  window.__API_BASE__ = "https://tset-bunny-a5r9w.bunny.run";
+  // "/api/" شروع بشه، خودکار به آدرس واقعی بک‌اند اضافه بشه.
+  //
+  // نکته: این آدرس مستقیم به Bunny نیست، بلکه یه Cloudflare Worker
+  // واسط (tset-proxy) است که خودش پشت‌صحنه به Bunny وصل می‌شه — چون
+  // Bunny به‌تنهایی از داخل ایران بدون فیلترشکن در دسترس نبود، ولی
+  // Cloudflare هست. اگه این پراکسی عوض شد، فقط همین یک خط باید عوض بشه.
+  window.__API_BASE__ = "https://tset-proxy.ghobeishawi6795.workers.dev";
   (function () {
     var realFetch = window.fetch.bind(window);
     window.fetch = function (input, init) {
