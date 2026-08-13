@@ -1,12 +1,12 @@
 {
-  "name": "آزمون‌ساز معلم",
-  "short_name": "آزمون‌ساز",
-  "description": "سامانه‌ی ساخت و برگزاری آزمون آنلاین برای معلمان",
+  "name": "شمام — شبکه مدیریت امتحانات مجازی",
+  "short_name": "شمام",
+  "description": "سامانه‌ی ساخت و برگزاری آزمون آنلاین برای معلمان و مدارس",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#F8FAFC",
-  "theme_color": "#1D3E73",
+  "theme_color": "#4338CA",
   "dir": "rtl",
   "lang": "fa",
   "icons": [
