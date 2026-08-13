@@ -2,7 +2,7 @@
 "use strict";
 /* ---------------------------------------------------------
    Icons (self-contained SVG replacements for lucide-react)
-   © ghobeishawi - All rights reserved.
+   © شمام - All rights reserved.
 --------------------------------------------------------- */
 const { useState, useEffect, useCallback, useRef } = React;
 function Icon({ size = 24, color = "currentColor", style, children, ...rest }) {
@@ -124,7 +124,7 @@ const Search = (p) => (React.createElement(Icon, { ...p },
 "use strict";
 /* ---------------------------------------------------------
    Shared utilities (KV helpers) + shared UI primitives
-   © ghobeishawi - All rights reserved.
+   © شمام - All rights reserved.
 --------------------------------------------------------- */
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 function omit(obj, keys) {
@@ -958,7 +958,7 @@ function Sidebar({ active, onNavigate, onLogout, teacherName, onHelp, brandColor
                 React.createElement("div", { style: { fontSize: 10, color: "#4B5C81", textAlign: "center", padding: "10px 14px 2px", letterSpacing: 0.3 } },
                     "\u00A9 ",
                     new Date().getFullYear(),
-                    " ghobeishawi \u2014 \u062A\u0645\u0627\u0645\u06CC \u062D\u0642\u0648\u0642 \u0645\u062D\u0641\u0648\u0638 \u0627\u0633\u062A")))));
+                    " شمام — شبکه مدیریت امتحانات مجازی")))));
 }
 // عکس پروفایل رو با هدر Authorization می‌گیره (چون <img src> نمی‌تونه هدر
 // بفرسته) و به‌صورت object URL محلی نشون می‌ده؛ اگه عکسی ثبت نشده باشه یا
@@ -1297,7 +1297,7 @@ class AppErrorBoundary extends React.Component {
 "use strict";
 /* ---------------------------------------------------------
    AUTH SCREENS (login / register / password reset)
-   © ghobeishawi - All rights reserved.
+   © شمام - All rights reserved.
 --------------------------------------------------------- */
 function ForgotPasswordScreen({ goLogin }) {
     const [username, setUsername] = useState("");
@@ -1439,8 +1439,8 @@ function LoginScreen({ onLogin, goRegister, allowRegister, goForgot, portalMode,
     };
     const handleKeyDown = (e) => { if (e.key === "Enter")
         submit(); };
-    return (React.createElement("div", { style: { minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#132A52,#1D3E73)", padding: isMobile ? 14 : 20 } },
-        React.createElement("div", { style: { display: "flex", flexDirection: isMobile ? "column" : "row", width: "100%", maxWidth: 860, background: "#fff", borderRadius: 22, overflow: "hidden", boxShadow: "0 20px 60px rgba(19,42,82,.35)" } },
+    return (React.createElement("div", { style: { minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#1A1B29,#4338CA)", padding: isMobile ? 14 : 20 } },
+        React.createElement("div", { style: { display: "flex", flexDirection: isMobile ? "column" : "row", width: "100%", maxWidth: 860, background: "#fff", borderRadius: 22, overflow: "hidden", boxShadow: "0 20px 60px rgba(26,27,41,.35)" } },
             React.createElement("div", { style: {
                     flex: isMobile ? "none" : 1, minWidth: isMobile ? "auto" : 260,
                     height: isMobile ? 130 : "auto",
@@ -1448,14 +1448,19 @@ function LoginScreen({ onLogin, goRegister, allowRegister, goForgot, portalMode,
                     backgroundSize: "cover", backgroundPosition: "center",
                 } }),
             React.createElement("div", { style: { flex: isMobile ? "none" : 1.15, padding: isMobile ? "24px 20px" : "44px 40px", display: "flex", flexDirection: "column" } },
+                React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10, marginBottom: isMobile ? 16 : 20 } },
+                    React.createElement("div", { style: { width: 38, height: 38, borderRadius: 11, background: "linear-gradient(135deg,#4338CA,#FF6B5B)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 900, fontSize: 17, flexShrink: 0 } }, "ش"),
+                    React.createElement("div", null,
+                        React.createElement("div", { style: { fontWeight: 900, fontSize: 19, color: "#1A1B29", lineHeight: 1.2 } }, "شمام"),
+                        React.createElement("div", { style: { fontSize: 11, color: "#666C85", fontWeight: 600 } }, "شبکه مدیریت امتحانات مجازی"))),
                 React.createElement("div", { style: { display: "flex", gap: 8, marginBottom: isMobile ? 18 : 24 } },
                     React.createElement("div", { onClick: () => setPortalMode && setPortalMode("teacher"), style: {
                             flex: 1, textAlign: "center", padding: "10px 4px", borderRadius: 10, cursor: "pointer", fontSize: 13, fontWeight: 700,
-                            background: portalMode !== "student" ? "#2563EB" : "#F1F5F9", color: portalMode !== "student" ? "#fff" : "#475569",
+                            background: portalMode !== "student" ? "#4338CA" : "#F1F5F9", color: portalMode !== "student" ? "#fff" : "#475569",
                         } }, "\u0648\u0631\u0648\u062F \u0645\u0639\u0644\u0645"),
                     React.createElement("div", { onClick: () => setPortalMode && setPortalMode("student"), style: {
                             flex: 1, textAlign: "center", padding: "10px 4px", borderRadius: 10, cursor: "pointer", fontSize: 13, fontWeight: 700,
-                            background: portalMode === "student" ? "#2563EB" : "#F1F5F9", color: portalMode === "student" ? "#fff" : "#475569",
+                            background: portalMode === "student" ? "#4338CA" : "#F1F5F9", color: portalMode === "student" ? "#fff" : "#475569",
                         } }, "\u067E\u0631\u062A\u0627\u0644 \u062F\u0627\u0646\u0634\u200C\u0622\u0645\u0648\u0632\u06CC")),
                 portalMode === "student" ? (React.createElement(StudentPortalScreen, { ...portalData })) : (React.createElement(React.Fragment, null,
                     React.createElement("div", { style: { fontSize: 13, color: "#64748B", marginBottom: 26 } }, "\u0628\u0631\u0627\u06CC \u0648\u0631\u0648\u062F\u060C \u0627\u0637\u0644\u0627\u0639\u0627\u062A \u062D\u0633\u0627\u0628 \u0645\u0639\u0644\u0645 \u0631\u0627 \u0648\u0627\u0631\u062F \u06A9\u0646."),
@@ -1467,17 +1472,17 @@ function LoginScreen({ onLogin, goRegister, allowRegister, goForgot, portalMode,
                                 React.createElement(TextInput, { type: showPw ? "text" : "password", value: password, onChange: (e) => setPassword(e.target.value), onKeyDown: handleKeyDown, placeholder: "\u0631\u0645\u0632 \u0639\u0628\u0648\u0631 \u0631\u0627 \u0648\u0627\u0631\u062F \u06A9\u0646\u06CC\u062F", style: { paddingLeft: 40 } }),
                                 React.createElement("span", { onClick: () => setShowPw((s) => !s), style: { position: "absolute", left: 12, top: 12, cursor: "pointer", color: "#94A3B8" } }, showPw ? React.createElement(EyeOff, { size: 17 }) : React.createElement(Eye, { size: 17 })))),
                         React.createElement("div", { style: { textAlign: "left", marginBottom: 14, marginTop: -6 } },
-                            React.createElement("span", { onClick: goForgot, style: { color: "#2563EB", fontSize: 12.5, fontWeight: 700, cursor: "pointer" } }, "\u0631\u0645\u0632 \u0639\u0628\u0648\u0631 \u0631\u0627 \u0641\u0631\u0627\u0645\u0648\u0634 \u06A9\u0631\u062F\u0647\u200C\u0627\u06CC\u062F\u061F")),
+                            React.createElement("span", { onClick: goForgot, style: { color: "#4338CA", fontSize: 12.5, fontWeight: 700, cursor: "pointer" } }, "\u0631\u0645\u0632 \u0639\u0628\u0648\u0631 \u0631\u0627 \u0641\u0631\u0627\u0645\u0648\u0634 \u06A9\u0631\u062F\u0647\u200C\u0627\u06CC\u062F\u061F")),
                         error && React.createElement("div", { style: { color: "#DC2626", fontSize: 13, marginBottom: 14 } }, error),
-                        React.createElement(Button, { type: "button", onClick: submit, style: { width: "100%", justifyContent: "center", padding: "12px 0", fontSize: 15 }, disabled: loading }, loading ? "در حال ورود..." : "ورود")),
+                        React.createElement(Button, { type: "button", onClick: submit, style: { width: "100%", justifyContent: "center", padding: "12px 0", fontSize: 15, background: "#4338CA" }, disabled: loading }, loading ? "در حال ورود..." : "ورود")),
                     allowRegister && (React.createElement("div", { style: { textAlign: "center", marginTop: 20, fontSize: 13, color: "#64748B" } },
                         "\u062D\u0633\u0627\u0628 \u0646\u062F\u0627\u0631\u06CC\u061F",
                         " ",
-                        React.createElement("span", { onClick: goRegister, style: { color: "#2563EB", fontWeight: 700, cursor: "pointer" } }, "\u062B\u0628\u062A\u200C\u0646\u0627\u0645"))))))),
+                        React.createElement("span", { onClick: goRegister, style: { color: "#4338CA", fontWeight: 700, cursor: "pointer" } }, "\u062B\u0628\u062A\u200C\u0646\u0627\u0645"))))))),
         React.createElement("div", { style: { textAlign: "center", marginTop: 16, fontSize: 11, color: "#8FA3C9", letterSpacing: 0.3 } },
             "\u00A9 ",
             new Date().getFullYear(),
-            " ghobeishawi \u2014 \u062A\u0645\u0627\u0645\u06CC \u062D\u0642\u0648\u0642 \u0645\u062D\u0641\u0648\u0638 \u0627\u0633\u062A")));
+            " شمام — شبکه مدیریت امتحانات مجازی")));
 }
 function RegisterScreen({ onRegistered, goLogin }) {
     const [fullname, setFullname] = useState("");
@@ -1557,7 +1562,7 @@ function RegisterScreen({ onRegistered, goLogin }) {
 "use strict";
 /* ---------------------------------------------------------
    DASHBOARD, EXAMS LIST, QUESTIONS, QUESTION BANK
-   © ghobeishawi - All rights reserved.
+   © شمام - All rights reserved.
 --------------------------------------------------------- */
 function DashboardScreen({ teacher, exams, questions, students, answers, onNavigate, onOpenExam }) {
     const myExams = exams.filter((e) => e.teacher_id === teacher.username);
@@ -3117,7 +3122,7 @@ MARK: 2`),
 "use strict";
 /* ---------------------------------------------------------
    STUDENT EXAM-TAKING FLOW + RESULTS + ESSAY GRADING
-   © ghobeishawi - All rights reserved.
+   © شمام - All rights reserved.
 --------------------------------------------------------- */
 // Shown to students after they submit an exam, picked at random each time.
 // Falls back to this built-in list if the teacher hasn't customized it in Settings.
@@ -4491,7 +4496,7 @@ function EssayGrading({ examId, questions, answers, students, refresh, aiAllowed
 "use strict";
 /* ---------------------------------------------------------
    CLASSES / ROSTER / STUDENTS / MESSAGES / STUDENT PORTAL / SETTINGS
-   © ghobeishawi - All rights reserved.
+   © شمام - All rights reserved.
 --------------------------------------------------------- */
 function ClassesScreen({ teacher, classes, roster, onOpenClass, addLocalClass, removeLocalClass }) {
     const myClasses = classes.filter((c) => classTeacherIds(c).includes(teacher.username))
@@ -5554,7 +5559,7 @@ function SettingsScreen({ teacher, onUpdate, refresh, exams, students }) {
 "use strict";
 /* ---------------------------------------------------------
    ADMIN DASHBOARD (school-wide, multi-teacher)
-   © ghobeishawi - All rights reserved.
+   © شمام - All rights reserved.
 --------------------------------------------------------- */
 function CreateTeacherForm({ onCreated, existingUsernames, schoolId }) {
     const [fullname, setFullname] = useState("");
@@ -6091,7 +6096,7 @@ function AdminSidebar({ active, onNavigate, onSettings, onHelp, onLogout, adminN
                 React.createElement("div", { style: { fontSize: 10, color: "#4B5C81", textAlign: "center", padding: "10px 14px 2px", letterSpacing: 0.3 } },
                     "\u00A9 ",
                     new Date().getFullYear(),
-                    " ghobeishawi \u2014 \u062A\u0645\u0627\u0645\u06CC \u062D\u0642\u0648\u0642 \u0645\u062D\u0641\u0648\u0638 \u0627\u0633\u062A")))));
+                    " شمام — شبکه مدیریت امتحانات مجازی")))));
 }
 function AdminDashboardScreen({ teacher, teachers, exams, classes, roster, students, questions, answers, messages, cheatAlerts, onLogout, onUpdateSelf, refresh, addLocalClass, removeLocalClass, updateLocalClass, addLocalRoster, addLocalRosterMany, updateLocalRoster, removeLocalRoster, addLocalQuestion, addLocalQuestionMany, updateLocalQuestion, removeLocalQuestion, removeLocalQuestionMany, removeLocalExam }) {
     const [view, setView] = useState("dashboard");
@@ -6631,7 +6636,7 @@ function AdminDashboardScreen({ teacher, teachers, exams, classes, roster, stude
             React.createElement("div", { style: { textAlign: "center", marginTop: 26, fontSize: 11, color: "#94A3B8" } },
                 "\u00A9 ",
                 new Date().getFullYear(),
-                " ghobeishawi \u2014 \u062A\u0645\u0627\u0645\u06CC \u062D\u0642\u0648\u0642 \u0645\u062D\u0641\u0648\u0638 \u0627\u0633\u062A")),
+                " شمام — شبکه مدیریت امتحانات مجازی")),
         showCreate && (React.createElement(Modal, { title: "\u0627\u0641\u0632\u0648\u062F\u0646 \u062D\u0633\u0627\u0628 \u0645\u0639\u0644\u0645 \u062C\u062F\u06CC\u062F", onClose: () => setShowCreate(false) },
             React.createElement(CreateTeacherForm, { existingUsernames: teachers.map((t) => t.username), schoolId: teacher.school_id, onCreated: async (teacher, emailResult) => {
                     setShowCreate(false);
@@ -7074,7 +7079,7 @@ function AdminBackupScreen({ refresh, teacher, onUpdateSelf, mySchool, setMyScho
 /* ---------------------------------------------------------
    SUPER-ADMIN DASHBOARD (top tier — creates schools, and one
    admin account per school; has no single-school data of its own)
-   © ghobeishawi - All rights reserved.
+   © شمام - All rights reserved.
 --------------------------------------------------------- */
 // فهرست «قابلیت‌های» قابل‌کنترل به‌صورت شخصی برای هر مدیر مدرسه یا معلم مستقل —
 // برای افزودن قابلیت جدید در آینده، فقط کافیه یک آیتم دیگه به این آرایه اضافه بشه.
@@ -8016,7 +8021,7 @@ function SuperAdminSidebar({ onLogout, onSettings, onHelp, name, activeTab, onTa
                 React.createElement("div", { style: { fontSize: 10, color: "#4B5C81", textAlign: "center", padding: "10px 14px 2px", letterSpacing: 0.3 } },
                     "\u00A9 ",
                     new Date().getFullYear(),
-                    " ghobeishawi \u2014 \u062A\u0645\u0627\u0645\u06CC \u062D\u0642\u0648\u0642 \u0645\u062D\u0641\u0648\u0638 \u0627\u0633\u062A")))));
+                    " شمام — شبکه مدیریت امتحانات مجازی")))));
 }
 function SuperAdminDashboardScreen({ teacher, onLogout, onUpdateSelf }) {
     const [schools, setSchools] = useState([]);
@@ -8246,7 +8251,7 @@ function SuperAdminDashboardScreen({ teacher, onLogout, onUpdateSelf }) {
 "use strict";
 /* ---------------------------------------------------------
    ROOT APP
-   © ghobeishawi - All rights reserved.
+   © شمام - All rights reserved.
 --------------------------------------------------------- */
 function EduExamApp() {
     const [authView, setAuthView] = useState("login"); // login | register | forgot
@@ -8851,7 +8856,7 @@ function EduExamApp() {
                     React.createElement("option", { value: "", disabled: true }, "\u067E\u06CC\u0634\u200C\u0646\u0645\u0627\u06CC\u0634 \u0622\u0632\u0645\u0648\u0646 \u0628\u0647\u200C\u0639\u0646\u0648\u0627\u0646 \u062F\u0627\u0646\u0634\u200C\u0622\u0645\u0648\u0632"),
                     exams.filter(e => e.teacher_id === teacher.username).map(e => (React.createElement("option", { key: e.id, value: e.id }, e.title)))))))));
 }
-console.log("%cآزمون‌ساز معلم%c\n© ghobeishawi - تمامی حقوق محفوظ است", "font-weight:bold;font-size:14px;color:#2563EB;", "color:#64748B;font-size:12px;");
+console.log("%cشمام%c\n© شبکه مدیریت امتحانات مجازی", "font-weight:bold;font-size:14px;color:#4338CA;", "color:#64748B;font-size:12px;");
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(React.createElement(AppErrorBoundary, null,
     React.createElement(EduExamApp, null)));
