@@ -3321,8 +3321,8 @@ function TakeExamScreen({ exam, questions, roster = [], classes = [], fetchQuest
         // سرور هیچ سؤالی نفرستاده بود؛ الان با اسم دوباره می‌گیریم تا همون
         // زیرمجموعه‌ی مخصوص همین دانش‌آموز (قطعی، نه هر بار متفاوت) بیاد.
         let effectiveQuestions = examQuestions;
-        if (exam.random_pool_count > 0 && fetchQuestionsForName) {
-            const fetched = await fetchQuestionsForName(exam.id, nameNorm, rosterIdRef.current);
+        if ((exam.random_pool_count > 0 || exam.access_code) && fetchQuestionsForName) {
+            const fetched = await fetchQuestionsForName(exam.id, nameNorm, rosterIdRef.current, accessCodeInput.trim());
             if (fetched.length > 0)
                 effectiveQuestions = fetched;
         }
@@ -3618,7 +3618,9 @@ function TakeExamScreen({ exam, questions, roster = [], classes = [], fetchQuest
                 React.createElement("div", { style: { fontSize: 12, color: "#64748B", marginBottom: 18 } },
                     exam.random_pool_count > 0
                         ? `هر شرکت‌کننده ${exam.random_pool_count} سؤال تصادفی از بانک این آزمون دریافت می‌کند.`
-                        : `${examQuestions.length} سوال در این آزمون وجود دارد.`,
+                        : exam.access_code
+                            ? "برای دیدن تعداد و متن سؤال‌ها، ابتدا کد دسترسی را وارد کن."
+                            : `${examQuestions.length} سوال در این آزمون وجود دارد.`,
                     totalSeconds !== null && ` زمان مجاز: ${exam.duration_minutes} دقیقه.`,
                     exam.no_going_back && " امکان بازگشت به سوالات قبلی وجود ندارد."),
                 (exam.opens_at || exam.closes_at) && (React.createElement("div", { style: { fontSize: 12, color: "#2563EB", background: "#EFF6FF", borderRadius: 8, padding: "8px 10px", marginBottom: 14 } },
@@ -8257,7 +8259,15 @@ function EduExamApp() {
     // If the URL is a student exam link (?exam=ID), jump straight into it, no login needed.
     const [studentExamId, setStudentExamId] = useState(() => new URLSearchParams(window.location.search).get("exam"));
     // If the URL is a password-reset link (?reset=TOKEN), show the reset screen.
-    const [resetToken, setResetToken] = useState(() => new URLSearchParams(window.location.search).get("reset"));
+    const [resetToken, setResetToken] = useState(() => {
+        const t = new URLSearchParams(window.location.search).get("reset");
+        if (t) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete("reset");
+            window.history.replaceState({}, "", url);
+        }
+        return t;
+    });
     const [teacherExists, setTeacherExists] = useState(false);
     const [teachers, setTeachers] = useState([]);
     const [exams, setExams] = useState([]);
@@ -8504,9 +8514,9 @@ function EduExamApp() {
     // دانش‌آموز رو بگیره؛ هم state کلی رو آپدیت می‌کنه هم مستقیم برمی‌گردونه
     // (چون فراخوان معمولاً بلافاصله بعدش به همون آرایه نیاز داره، نه به
     // یک رندر بعدی).
-    const fetchExamQuestionsForName = useCallback(async (examId, name, rosterId) => {
+    const fetchExamQuestionsForName = useCallback(async (examId, name, rosterId, accessCode) => {
         try {
-            const r = await fetch(`/api/exam-session?examId=${encodeURIComponent(examId)}&name=${encodeURIComponent(name)}${rosterId ? `&rosterId=${encodeURIComponent(rosterId)}` : ""}`);
+            const r = await fetch(`/api/exam-session?examId=${encodeURIComponent(examId)}&name=${encodeURIComponent(name)}${rosterId ? `&rosterId=${encodeURIComponent(rosterId)}` : ""}${accessCode ? `&accessCode=${encodeURIComponent(accessCode)}` : ""}`);
             if (!r.ok)
                 return [];
             const data = await r.json();
