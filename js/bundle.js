@@ -8254,7 +8254,12 @@ function SuperAdminDashboardScreen({ teacher, onLogout, onUpdateSelf }) {
    © شمام - All rights reserved.
 --------------------------------------------------------- */
 function EduExamApp() {
-    const [authView, setAuthView] = useState("login"); // login | register | forgot
+    const [authView, setAuthView] = useState(window.location.hash === "#register" ? "register" : "login"); // login | register | forgot
+    useEffect(() => {
+        const onHashChange = () => { if (window.location.hash === "#register") setAuthView("register"); };
+        window.addEventListener("hashchange", onHashChange);
+        return () => window.removeEventListener("hashchange", onHashChange);
+    }, []);
     const [portalMode, setPortalMode] = useState("teacher"); // teacher | student
     const [teacher, setTeacher] = useState(null);
     const [view, setView] = useState("dashboard");
