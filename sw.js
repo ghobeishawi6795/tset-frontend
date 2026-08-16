@@ -3,7 +3,7 @@
    Bump CACHE_VERSION any time index.html or js/bundle.js change,
    so returning users get the new files instead of a stale cache.
 --------------------------------------------------------- */
-const CACHE_VERSION = "v77";
+const CACHE_VERSION = "v80";
 const CACHE_NAME = `eduexam-shell-${CACHE_VERSION}`;
 
 // کش جدا برای داده‌ی خودِ آزمون (سؤال‌ها، لیست کلاس/roster). عمداً از
@@ -15,13 +15,13 @@ const CACHE_NAME = `eduexam-shell-${CACHE_VERSION}`;
 const EXAM_CACHE_NAME = "eduexam-examdata-v1";
 
 const APP_SHELL = [
-  "./",
-  "./index.html",
-  "./manifest.json",
-  "./js/bundle.js",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png",
-  "./assets/login-hero.jpg",
+  "/",
+  "/index.html",
+  "/manifest.json",
+  "/js/bundle.js",
+  "/icons/icon-192.png",
+  "/icons/icon-512.png",
+  "/assets/login-hero.jpg",
   "https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js",
 ];
